@@ -1,0 +1,69 @@
+#flex-conteiner{
+    width: 600px;
+    background-color: rgba(158, 158, 158, 0.54);
+    border: 1px solid green;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+#flex-conteiner input{
+    height: 23px;
+    width: 250px;
+}
+
+#addButton{
+    padding: 5px 30px;
+    height:30px;
+    cursor: pointer;
+    background-color: #00a600;
+    color: white;
+}
+
+#tasksList{
+    width: 350px;
+    border: 1px solid green;
+    /*position: relative;*/
+}
+
+#tasksList li {
+    list-style-type: none;
+    font-size:25px;
+    color: #83a0a6;
+    cursor: pointer;
+    margin-left: -50px;
+    position: relative;
+}
+
+.lineThrought{
+    text-decoration: line-through;
+}
+
+#tasksList li:hover{
+    color: #333f45;
+}
+
+.checkingView{
+    width: 30px !important;
+    order: 1;
+
+}
+.taskText{
+    margin-right: 80px;
+}
+.closeView{
+    font-family:Georgia;
+    font-size:30px;
+    font-weight:normal;
+    color:#CE7BE5;
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 0;
+}
+.closeView:hover{
+    font-weight: bold;
+    color: blueviolet;
+}

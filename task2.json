@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "taskText": "prepaire to selebraiting Easter",
+        "checked": true
+    },
+    {
+        "id": 3,
+        "taskText": "finish project",
+        "checked": false
+    },
+    {
+        "id": 4,
+        "taskText": "call friend",
+        "checked": false
+    },
+    {
+        "id": 5,
+        "taskText": "do home work",
+        "checked": false
+    },
+    {
+        "id": 6,
+        "taskText": "fix speaker",
+        "checked": false
+    },
+    {
+        "id": 7,
+        "taskText": "dish wash",
+        "checked": true
+    },
+    {
+        "taskText": "new Taso4ka",
+        "checked": true,
+        "id": 8
+    },
+    {
+        "taskText": "new Taso4ka",
+        "checked": true,
+        "id": 9
+    }
+]
