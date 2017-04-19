@@ -4,16 +4,12 @@ var ELEMENTS ={
     inputForTask: document.getElementById('inputForTask'),
     tasksList: document.getElementById('tasksList'),
     closeView: document.getElementsByClassName('closeView'),
-    // Li: document.getElementsByClassName('newLi'),
     show: document.getElementById('show')
 }
-
-var createdNewElements={}
 
 function render(obj) {
     var newLi = document.createElement('li'),
         newSpan = document.createElement('span'),
-        // taskText = document.createElement('span'),
         newCheck = document.createElement('input');
 
     newLi.setAttribute('data-id',obj.id)
@@ -27,9 +23,6 @@ function render(obj) {
     newLi.appendChild(newCheck);
 
     newLi.appendChild( document.createTextNode(obj.taskText) );
-
-    // taskText.className = 'taskText';
-    // newLi.appendChild(taskText);
 
     newSpan.innerHTML = '&times;';
     newSpan.className = 'closeView';
@@ -47,8 +40,7 @@ function displayFromFile(){
         if (this.readyState === this.DONE){
             if(this.status === STATUS_OK){
                 console.log(this.response);
-                var newResponse = this.response;
-                newResponse.forEach(function (elem) {
+                this.response.forEach(function (elem) {
                     render(elem);
                 })
             } else{
@@ -61,7 +53,6 @@ function displayFromFile(){
 
 function sendToServer(obj, state) {
     var xhr = new XMLHttpRequest();
-    var newResponse;
     if (obj instanceof Object){
         xhr.open('POST', '/sendForWrite', true);
         xhr.responseType = 'json';
@@ -72,10 +63,7 @@ function sendToServer(obj, state) {
             var STATUS_OK = 200;
             if (this.readyState === this.DONE) {
                 if (this.status === STATUS_OK) {
-                    // console.log(this.response);
-                    newResponse = this.response;
-                    console.log('newResponse', newResponse);
-                    render(newResponse);
+                    render(this.response);
                 } else {
                     console.log('ERROR!!!!!!!');
                 }
@@ -92,7 +80,6 @@ function sendToServer(obj, state) {
                 var STATUS_OK = 200;
                 if (this.readyState === this.DONE) {
                     if (this.status === STATUS_OK) {
-                        // newResponse = this.response;
                         console.log('the task was checked');
                     } else {
                         console.log('ERROR!!!!!!!');
@@ -107,7 +94,6 @@ function sendToServer(obj, state) {
                 var STATUS_OK = 200;
                 if (this.readyState === this.DONE) {
                     if (this.status === STATUS_OK) {
-                        // newResponse = this.response;
                         console.log('the task was removed');
                     } else {
                         console.log('ERROR!!!!!!!');
@@ -127,7 +113,6 @@ function addTask() {
     sendToServer(newTask);
     inputForTask.value = '';
 }
-
 
 //assign events
  ELEMENTS.addButton.addEventListener('click', addTask);
@@ -149,9 +134,6 @@ ELEMENTS.tasksList.onclick = function (event) {
         event.target.parentNode.classList.toggle('lineThrought');
         sendToServer( +event.target.parentNode.getAttribute('data-id'), event.target.checked)
     }
-
 }
-
-
 
 });// end
