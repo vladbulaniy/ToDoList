@@ -2,7 +2,6 @@ var http = require("http");
 var fs = require('fs');
 var url = require("url");
 var path = require('path');
-// var json = require('./task.json')
 
 http.createServer(function(request, response) {
 	 var pathname = url.parse(request.url).pathname, // /index.html
@@ -12,24 +11,24 @@ http.createServer(function(request, response) {
 	extName = path.extname(request.url).replace('.', ''); // html
 
     if (request.method === 'GET') {
+            fs.readFile(request.url.replace('/', ''), function (err, data) {
+                 // console.log('data',JSON.parse(data) );
+                var types = {
+                    'js': 'text/javascript',
+                    'css': 'text/css',
+                    'html': 'text/html',
+                    'json': 'application/json',
+                    'ico': 'image/x-icon'
+                };
+                // console.log('types[extName]',types[extName]);
+                response.writeHead(200, {
+                    'Content-Type': types[extName]
+                });
 
-        fs.readFile(request.url.replace('/', ''), function (err, data) {
-            //console.log('data',JSON.parse(data) );
-			var types = {
-				'js': 'text/javascript',
-				'css': 'text/css',
-				'html': 'text/html',
-				'json': 'application/json',
-				'ico': 'image/x-icon'
-			};
-				// console.log('types[extName]',types[extName]);
-            response.writeHead(200, {
-                'Content-Type': types[extName]
+                response.end(data);
             });
 
-            response.end(data);
-        });
-    }
+    } //request.method === 'GET'
 
     if(request.method === 'POST'){
         if (request.url === '/sendForWrite'){
@@ -51,10 +50,10 @@ http.createServer(function(request, response) {
                             response.end(JSON.stringify(newTask));
                         }
                     });
-                });
+                });fs.readFile
             });
-        }
-    }
+        } request.url === '/sendForWrite'
+    } request.method === 'POST'
 
 
     if(request.method === 'POST'){
@@ -116,3 +115,5 @@ http.createServer(function(request, response) {
 }).listen(8080);
 
 console.log('Server running on port 8080');
+
+

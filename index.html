@@ -5,16 +5,28 @@
     <title>Title</title>
     <link rel="stylesheet" href="style.css">
 
+
 </head>
 
 <body>
+
+
     <div id="flex-conteiner">
         <input id="inputForTask" placeholder="Add a note..." value="new Taso4ka"/>
         <button id="addButton">Add</button>
         <button id="show">Display</button>
-        <ul id="tasksList"> </ul>
+        <ul id="todo-list">
+            <script type="text/template" id="taskTemplate">
+                <input type="checkbox" class="checkingView"> <span class="taskText"><%= title %></span> <span class="closeView"> &times;</span>
+            </script>
+        </ul>
     </div>
-<script src="toDoJS.js"></script>
+<!--<script src="toDoJS.js"></script>-->
     <!--<script src="script.js"></script>-->
+
+    <script src="libs/jquery-3.2.1.min.js"></script>
+    <script src="libs/underscore-min.js"></script>
+    <script src="libs/backbone.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

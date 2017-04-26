@@ -22,12 +22,12 @@
     color: white;
 }
 
-#tasksList{
+#todo-list{
     width: 350px;
     /*position: relative;*/
 }
 
-#tasksList li {
+#todo-list li {
     list-style-type: none;
     font-size:25px;
     color: #83a0a6;
@@ -40,7 +40,7 @@
     text-decoration: line-through;
 }
 
-#tasksList li:hover{
+#todo-list li:hover{
     color: #333f45;
 }
 
@@ -50,7 +50,7 @@
 
 }
 .taskText{
-    margin-right: 80px;
+    margin-right: 10px;
 }
 .closeView{
     font-family:Georgia;
