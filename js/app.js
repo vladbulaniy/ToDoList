@@ -13,8 +13,8 @@ $(function () {
 
     App.Models.Task = Backbone.Model.extend({
         default: {
-            title: '',
             id: '',
+            title: '',
             checked: false
         },
 
@@ -23,7 +23,31 @@ $(function () {
                 return 'Имя задачи должно быть валидным!';
             }
         },
-        url: "temp"
+        getCustomUrl: function (method) {
+            switch (method) {
+                case 'read':
+                    return 'task.json';
+                    break;
+                case 'create':
+                    return 'sendForWrite';
+                    break;
+                case 'update':
+                    return 'sendForChangingCheck';
+                    break;
+                case 'delete':
+                    console.log('delete was worked');
+                    return 'sendForRemove';
+                    break;
+            }
+        },
+        // Now lets override the sync function to use our custom URLs
+        sync: function (method, model, options) {
+            options || (options = {});
+            options.url = this.getCustomUrl(method.toLowerCase());
+
+            // Lets notify backbone to use our URLs and do follow default course
+            return Backbone.sync.apply(this, arguments);
+        }
     }); //App.Models.Task
 
     App.Views.Task = Backbone.View.extend({
@@ -50,7 +74,15 @@ $(function () {
             console.log('test was worked', this.$el.html() );
         },
         deleteTask: function () {
-            this.model.destroy();
+            console.log('this model before ', this.model);
+            this.model.destroy({success: function(model, response) {
+                console.log('this.model ', this.model);
+            }},
+                {error: function (data) {
+                    console.log('error!!! ', data);
+                }}
+                );
+            // this.model.save();
             console.log(tasksCollections);
         },
         remove: function () {
@@ -60,12 +92,11 @@ $(function () {
 
     App.Collections.Task = Backbone.Collection.extend({
         model: App.Models.Task,
-        url: '/task'
+        url: 'task.json'   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     });  //App.Collections.Task
 
     App.Views.Tasks = Backbone.View.extend({
         tagName: 'ul',
-
         initialize: function(){
            this.collection.on('add', this.addOne, this);
         },
@@ -83,6 +114,7 @@ $(function () {
     }); //App.Views.Tasks
 
     App.Views.addTask = Backbone.View.extend({
+        model: App.Models.Task,
         el: '#addButton',
 
         events: {
@@ -91,55 +123,52 @@ $(function () {
 
         addNewTask: function () {
             var newTaskTitle = $('#inputForTask').val();
-
-            var newTask = new App.Models.Task({title: newTaskTitle});
+            console.log('collection ',this.collection);
+            var newTask = new App.Models.Task({
+                title: newTaskTitle,
+                checked: false
+            });
             this.collection.add(newTask);
-            console.log('worked',newTask.get('title')  );
-            console.log(this.collection);
+
+            console.log('worked',newTask  );
+
+            newTask.save(newTask.toJSON(), {error: function(data){
+                console.log('error', data)
+            }, success: function () {
+                    console.log('success')
+                }
+            }
+            );
+            // newTask.url.set('temp');
+            console.log('worked2 ',newTask.url )  ;
         },
 
         initialize: function () {
-            console.log('snhdS',this.el)
+            console.log('snhdS',this.el);
         }
     })
 
-    /*
-    var tasksCollections = new App.Collections.Task(
-
-        [
-       {
-            title: 'Make table',
-            id:3
-        },
-        {
-            title: 'to call friend',
-            id:4
-        },
-        {
-            title: 'fix bags',
-            id:5
-        },
-
-        ]
-
-    );
-*/
 
 
-    var tasksCollections = new App.Collections.Task().fetch();
-    console.log('tasksCollections', tasksCollections);
-    /*
-    var task = new App.Models.Task({
-        title: 'Make hw',
-        id:3
-    });
-*/
+    // var addTask = new App.Views.addTask();
 
-var tasksView = new App.Views.Tasks({collection: tasksCollections});
-var addTask = new App.Views.addTask({collection: tasksCollections} );
-    // console.log(tasksView.render().el);
+    var tasksCollections;
+    var toDoList = new App.Collections.Task;
+    // var addTask = new App.Views.addTask({collection: tasksCollections} );
 
-$('#todo-list').html(tasksView.render().el);
 
+    toDoList.fetch()
+        .then(function (data) {
+            console.log('request succeeded with JSON response', data);
+            tasksCollections = new App.Collections.Task(data);
+            tasksCollections.url = 'task.json';
+            console.log('tasksCollections ', tasksCollections.url);
+            var tasksView = new App.Views.Tasks({collection: tasksCollections});
+            var addTask = new App.Views.addTask({collection: tasksCollections});
+            $('#todo-list').html(tasksView.render().el);
+        })
+        .catch(function (error) {
+            console.log('request failed', error)
+        });
 
 })

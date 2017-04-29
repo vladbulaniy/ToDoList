@@ -30,10 +30,14 @@ http.createServer(function(request, response) {
 
     } //request.method === 'GET'
 
+
+
     if(request.method === 'POST'){
+        console.log('clientData ',request.url);
         if (request.url === '/sendForWrite'){
             request.on('data',function (clientData) {
                 var newTask = JSON.parse(clientData);
+                console.log('clientData ',clientData);
                 fs.readFile('task.json', function (err,data) {
                    var tasks = JSON.parse(data);
                    if(tasks.length !== 0){
@@ -56,9 +60,12 @@ http.createServer(function(request, response) {
     } request.method === 'POST'
 
 
-    if(request.method === 'POST'){
+    if(request.method === 'DELETE'){
+        console.log('delete was worked', request.url);
         if (request.url === '/sendForRemove'){
+            console.log('delete was worked2');
             request.on('data',function (clientData) {
+                console.log('clientData ', clientData);
                 var ID = JSON.parse(clientData),
                     temp;
 
@@ -85,7 +92,7 @@ http.createServer(function(request, response) {
     }
 
 
-    if(request.method === 'POST'){
+    if(request.method === 'PUT'){
         if (request.url === '/sendForChangingCheck'){
             request.on('data',function (clientData) {
                 var ID = JSON.parse(clientData);
